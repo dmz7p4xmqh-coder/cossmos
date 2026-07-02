@@ -1,0 +1,28 @@
+# --- Go ---
+/cossmos
+/cossmos.exe
+*.test
+*.out
+coverage.*
+
+# --- runtime data & generated output ---
+/data/
+/public/
+status.json
+
+# --- frontend ---
+web/node_modules/
+web/dist/*
+!web/dist/.gitkeep
+web/.vite/
+*.tsbuildinfo
+
+# --- editor / OS ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
+.env
+.env.*
+!.env.example

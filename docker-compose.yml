@@ -1,0 +1,19 @@
+services:
+  cossmos:
+    build:
+      context: .
+    image: ghcr.io/normal-ex/cossmos:latest
+    container_name: cossmos
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      COSSMOS_MODE: serve
+    volumes:
+      - cossmos-data:/app/data
+      # To use your own config, copy config.example.yaml to config.yaml and
+      # uncomment the line below (the image ships with the demo config):
+      # - ./config.yaml:/app/config.yaml:ro
+
+volumes:
+  cossmos-data:

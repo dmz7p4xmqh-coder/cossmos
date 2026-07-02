@@ -1,0 +1,13 @@
+.git
+.github
+**/node_modules
+web/dist
+/data
+/public
+/cossmos
+/cossmos.exe
+*.log
+*.test
+.DS_Store
+README.md
+docs

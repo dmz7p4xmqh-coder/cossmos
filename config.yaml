@@ -1,0 +1,70 @@
+# ============================================================================
+# Cossmos 配置 —— 这是你唯一需要编辑的文件。
+# Use this template, then edit THIS file: set your site info and services.
+# 完整字段说明见 config.example.yaml / full reference in config.example.yaml
+# ============================================================================
+
+site:
+  title: "Cossmos 服务状态"
+  description: "实时服务可用性监控 · powered by COSS UI + Go"
+  github: "https://github.com/NORMAL-EX/Cossmos"
+  refreshInterval: 60                 # 前端自动刷新间隔（秒，serve 模式）
+
+  # 站点 Logo（可选）。图片 URL 或 data URI；logoDark 为深色模式下的变体。
+  # Optional logo (image URL or data URI); logoDark is the dark-mode variant.
+  # logo: "https://your.site/logo.svg"
+  # logoDark: "https://your.site/logo-dark.svg"
+
+  # 备案号（可选，留空则不显示）/ filing numbers (leave empty to hide)
+  icp: ""                             # 例: 京ICP备12345678号
+  icpLink: "https://beian.miit.gov.cn/"
+  policeIcp: ""                       # 例: 京公网安备 11010802000000号
+  policeIcpLink: "https://beian.mps.gov.cn/"
+  footer: ""                          # 自定义页脚文本
+
+monitor:
+  interval: 60        # serve 模式两轮检查间隔（秒）
+  timeout: 12         # 每个检查默认超时（秒）
+  historySize: 90     # 每个服务保留的历史点数
+  concurrency: 8      # 最大并发检查数
+
+server:
+  listen: ":8080"
+
+# ⬇️ 把下面替换成你自己的服务 / replace with your own services
+services:
+  - name: "GitHub"
+    group: "示例 / Examples"
+    type: http
+    url: "https://github.com"
+    expectStatus: [200]
+    degradedMs: 1500
+
+  - name: "GitHub API"
+    group: "示例 / Examples"
+    type: http
+    url: "https://api.github.com"
+    expectStatus: [200]
+    keyword: "current_user_url"       # 响应体须包含的关键字（可选）
+    degradedMs: 1500
+
+  - name: "Cloudflare"
+    group: "示例 / Examples"
+    type: http
+    url: "https://www.cloudflare.com"
+    expectStatus: [200]
+    degradedMs: 1500
+
+  - name: "Cloudflare DNS"
+    group: "示例 / Examples"
+    type: tcp                          # TCP 端口检查
+    host: "1.1.1.1"
+    port: 443
+    degradedMs: 600
+
+  - name: "Wikipedia"
+    group: "示例 / Examples"
+    type: http
+    url: "https://www.wikipedia.org"
+    expectStatus: [200]
+    degradedMs: 2000

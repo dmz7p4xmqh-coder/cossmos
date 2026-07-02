@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="Cossmos — 使用 COSS UI 构建的服务状态监测器 / a service status monitor built with COSS UI" />
+    <title>Cossmos · 服务状态</title>
+    <!-- Apply the saved/system theme before first paint to avoid a flash. -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("cossmos-theme") || "system";
+          var dark =
+            t === "dark" ||
+            (t === "system" &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          document.documentElement.classList.toggle("dark", dark);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

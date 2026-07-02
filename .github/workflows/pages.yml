@@ -1,0 +1,85 @@
+name: Demo (GitHub Pages)
+
+# Runs the monitor in one-shot mode on a schedule, regenerates status.json and
+# publishes the static dashboard to GitHub Pages. No server is started.
+#
+# One-time setup: enable Pages with Settings -> Pages -> Source: "GitHub Actions".
+on:
+  schedule:
+    - cron: "*/15 * * * *" # every 15 minutes (GitHub may throttle shorter intervals)
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "web/**"
+      - "internal/**"
+      - "main.go"
+      - "config.yaml"
+      - ".github/workflows/pages.yml"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment; let in-progress runs finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build status site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: web/package-lock.json
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.24"
+          cache: true
+
+      # Persist check history across scheduled runs. The key is unique per run so
+      # a fresh cache is always saved, while restore-keys loads the latest one.
+      - name: Restore history
+        uses: actions/cache@v4
+        with:
+          path: data
+          key: cossmos-history-${{ github.run_id }}
+          restore-keys: |
+            cossmos-history-
+
+      - name: Build frontend
+        working-directory: web
+        run: |
+          npm ci
+          npm run build
+
+      - name: Run checks (once mode) → status.json
+        run: |
+          go build -trimpath -ldflags "-s -w -X main.version=pages-${{ github.run_number }}" -o cossmos .
+          ./cossmos -mode once -config config.yaml -out web/dist -data data/history.json
+          touch web/dist/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
+  deploy:
+    name: Deploy to Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deploy
+        uses: actions/deploy-pages@v4

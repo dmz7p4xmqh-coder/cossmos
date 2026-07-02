@@ -1,0 +1,93 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "claude/**"]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Go
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.24"
+          cache: true
+      - name: Vet
+        run: go vet ./...
+      - name: Test
+        run: go test ./... -race
+      - name: Build
+        run: go build ./...
+
+  frontend:
+    name: Web
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: web/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Build
+        run: npm run build
+
+  demo:
+    name: Demo build (once mode)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: web/package-lock.json
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.24"
+          cache: true
+      - name: Build frontend
+        working-directory: web
+        run: |
+          npm ci
+          npm run build
+      - name: Run once mode and verify status.json
+        run: |
+          go build -o cossmos .
+          ./cossmos -mode once -config config.yaml -out web/dist -data data/history.json
+          test -f web/dist/status.json
+          node -e "const s=require('./web/dist/status.json'); if(!Array.isArray(s.services)||!s.services.length){console.error('no services');process.exit(1)} console.log('services:',s.services.length,'overall:',s.overall)"
+
+  image:
+    name: Docker build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build image (no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          platforms: linux/amd64
+          tags: cossmos:ci
+          build-args: |
+            VERSION=ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

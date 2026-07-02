@@ -1,0 +1,59 @@
+# Cossmos 配置示例 / example configuration
+# 复制为 config.yaml 后按需修改。Copy to config.yaml and edit.
+
+# 站点展示信息 / site presentation
+site:
+  title: "Cossmos 服务状态"
+  description: "实时服务可用性监控 · powered by COSS UI + Go"
+  github: "https://github.com/NORMAL-EX/Cossmos"
+  # 前端自动刷新间隔（秒），仅 serve 模式生效 / auto-refresh seconds (serve mode)
+  refreshInterval: 60
+  # 备案号 / Chinese filing numbers (留空则不显示 / leave empty to hide)
+  icp: ""                                        # 例: 京ICP备12345678号
+  icpLink: "https://beian.miit.gov.cn/"          # 工信部备案查询
+  policeIcp: ""                                  # 例: 京公网安备 11010802000000号
+  policeIcpLink: "https://beian.mps.gov.cn/"     # 公安备案查询
+  footer: ""                                     # 自定义页脚文本（可含年份等）
+
+# 监控调度参数 / scheduler tuning
+monitor:
+  interval: 60        # serve 模式下两轮检查之间的间隔（秒）
+  timeout: 10         # 每个检查的默认超时（秒）
+  historySize: 60     # 每个服务保留的历史采样点数量
+  concurrency: 8      # 最大并发检查数
+
+# HTTP 服务器（仅 serve 模式）/ HTTP server (serve mode only)
+server:
+  listen: ":8080"
+
+# 被监控的服务列表 / monitored services
+services:
+  # ---- HTTP / HTTPS 检查 ----
+  - name: "官网首页"
+    group: "网站"
+    description: "主站点可用性"
+    type: http
+    url: "https://example.com"
+    method: GET                 # GET / HEAD / POST ...
+    expectStatus: [200, 301, 302]
+    keyword: ""                 # 响应体须包含的关键字（可选）
+    degradedMs: 1500            # 慢于该毫秒数判定为 degraded
+    timeout: 10
+    insecure: false             # 跳过 TLS 证书校验
+    # headers:
+    #   Authorization: "Bearer xxx"
+
+  - name: "API 网关"
+    group: "服务"
+    type: http
+    url: "https://example.com/health"
+    expectStatus: [200]
+    keyword: "ok"
+
+  # ---- TCP 端口检查 ----
+  - name: "数据库 (PostgreSQL)"
+    group: "服务"
+    type: tcp
+    host: "db.example.com"
+    port: 5432
+    degradedMs: 800
