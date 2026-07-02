@@ -47,6 +47,13 @@ services:
     expectStatus: [200]
     degradedMs: 1500
 
+  - name: "OpenList"
+    group: "Web"
+    type: http
+    url: "https://alist.kernelneko.top"
+    expectStatus: [200]
+    degradedMs: 1500
+
   - name: "Cloudflare DNS"
     group: "DNS"
     type: tcp                          # TCP 端口检查
