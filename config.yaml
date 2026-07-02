@@ -5,7 +5,7 @@
 # ============================================================================
 
 site:
-  title: "Cossmos 服务状态"
+  title: "Neko Server 服务状态"
   description: "实时服务可用性监控 · powered by COSS UI + Go"
   github: "https://github.com/NORMAL-EX/Cossmos"
   refreshInterval: 60                 # 前端自动刷新间隔（秒，serve 模式）
@@ -16,7 +16,7 @@ site:
   # logoDark: "https://your.site/logo-dark.svg"
 
   # 备案号（可选，留空则不显示）/ filing numbers (leave empty to hide)
-  icp: ""                             # 例: 京ICP备12345678号
+  icp: "鲁ICP备2024128177号-1"                             # 例: 京ICP备12345678号
   icpLink: "https://beian.miit.gov.cn/"
   policeIcp: ""                       # 例: 京公网安备 11010802000000号
   policeIcpLink: "https://beian.mps.gov.cn/"
@@ -33,38 +33,23 @@ server:
 
 # ⬇️ 把下面替换成你自己的服务 / replace with your own services
 services:
-  - name: "GitHub"
-    group: "示例 / Examples"
+  - name: "Blog"
+    group: "Web"
     type: http
-    url: "https://github.com"
+    url: "https://www.kernelneko.top"
     expectStatus: [200]
     degradedMs: 1500
 
-  - name: "GitHub API"
-    group: "示例 / Examples"
+  - name: "Gitea"
+    group: "Web"
     type: http
-    url: "https://api.github.com"
-    expectStatus: [200]
-    keyword: "current_user_url"       # 响应体须包含的关键字（可选）
-    degradedMs: 1500
-
-  - name: "Cloudflare"
-    group: "示例 / Examples"
-    type: http
-    url: "https://www.cloudflare.com"
+    url: "https://gitea.kernelneko.top"
     expectStatus: [200]
     degradedMs: 1500
 
   - name: "Cloudflare DNS"
-    group: "示例 / Examples"
+    group: "DNS"
     type: tcp                          # TCP 端口检查
     host: "1.1.1.1"
     port: 443
     degradedMs: 600
-
-  - name: "Wikipedia"
-    group: "示例 / Examples"
-    type: http
-    url: "https://www.wikipedia.org"
-    expectStatus: [200]
-    degradedMs: 2000
