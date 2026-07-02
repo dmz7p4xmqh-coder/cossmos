@@ -61,7 +61,7 @@ services:
     port: 443
     degradedMs: 600
 
-  - name: "Cloudflare DNS"
+  - name: "114 DNS"
     group: "DNS"
     type: tcp                          # TCP 端口检查
     host: "114.114.114.114"
