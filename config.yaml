@@ -53,10 +53,3 @@ services:
     host: "1.1.1.1"
     port: 443
     degradedMs: 600
-
-  - name: "HK Server"
-    group: "Server"
-    type: tcp                          # TCP 端口检查
-    host: "64.90.12.71"
-    port: 80
-    degradedMs: 600
