@@ -22,6 +22,7 @@ site:
   title: "Test"
   icp: "京ICP备1号"
   refreshInterval: 120
+  hideTargets: true
 services:
   - name: "web"
     url: "https://example.com"
@@ -45,6 +46,9 @@ services:
 	}
 	if c.Site.RefreshInterval != 120 {
 		t.Errorf("refreshInterval = %d, want 120 (yaml tag must match camelCase)", c.Site.RefreshInterval)
+	}
+	if !c.Site.HideTargets {
+		t.Errorf("hideTargets = false, want true (yaml tag must match camelCase)")
 	}
 	if c.Site.ICPLink == "" {
 		t.Errorf("icpLink should be auto-filled when icp is set")

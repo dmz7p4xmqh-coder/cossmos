@@ -4,9 +4,11 @@ import type { Service } from "@/lib/types";
 export function ServiceGroup({
   name,
   services,
+  compact,
 }: {
   name: string;
   services: Service[];
+  compact?: boolean;
 }) {
   return (
     <section className="space-y-3">
@@ -20,7 +22,7 @@ export function ServiceGroup({
       )}
       <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
         {services.map((s) => (
-          <ServiceCard key={s.id} service={s} />
+          <ServiceCard key={s.id} service={s} compact={compact} />
         ))}
       </div>
     </section>

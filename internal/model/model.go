@@ -54,6 +54,7 @@ type SiteInfo struct {
 	PoliceICPLink   string `json:"policeIcpLink,omitempty" yaml:"policeIcpLink"`
 	Footer          string `json:"footer,omitempty" yaml:"footer"`
 	GitHub          string `json:"github,omitempty" yaml:"github"`
+	HideTargets     bool   `json:"hideTargets,omitempty" yaml:"hideTargets"` // hide service URLs/IPs from public status output
 	RefreshInterval int    `json:"refreshInterval" yaml:"refreshInterval"` // frontend auto-refresh seconds (serve mode)
 }
 

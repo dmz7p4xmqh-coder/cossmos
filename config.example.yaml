@@ -8,6 +8,9 @@ site:
   github: "https://github.com/NORMAL-EX/Cossmos"
   # 前端自动刷新间隔（秒），仅 serve 模式生效 / auto-refresh seconds (serve mode)
   refreshInterval: 60
+  # 隐藏前端面板与 status.json 中的服务目标地址（URL、域名、IP:端口）
+  # Hide service target addresses (URLs, domains, IP:port) from the web panel and status.json.
+  hideTargets: false
   # 备案号 / Chinese filing numbers (留空则不显示 / leave empty to hide)
   icp: ""                                        # 例: 京ICP备12345678号
   icpLink: "https://beian.miit.gov.cn/"          # 工信部备案查询

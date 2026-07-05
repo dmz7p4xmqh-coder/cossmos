@@ -40,7 +40,13 @@ function CertLine({ expiry }: { expiry: string }) {
   );
 }
 
-export function ServiceCard({ service }: { service: Service }) {
+export function ServiceCard({
+  service,
+  compact = false,
+}: {
+  service: Service;
+  compact?: boolean;
+}) {
   const { t } = useI18n();
   const meta = statusMeta[service.status];
   const hasIssue = service.status === "down" || service.status === "degraded";
@@ -48,7 +54,7 @@ export function ServiceCard({ service }: { service: Service }) {
 
   return (
     <Card className="gap-0 overflow-hidden py-0 transition-shadow hover:shadow-md">
-      <div className="flex flex-col gap-4 p-4 sm:p-5">
+      <div className={cn("flex flex-col p-4 sm:p-5", compact ? "gap-3" : "gap-4")}>
         <div className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-start gap-3">
             <StatusDot status={service.status} pulse={hasIssue} className="mt-1.5" />
@@ -76,7 +82,10 @@ export function ServiceCard({ service }: { service: Service }) {
           </p>
         )}
 
-        <UptimeBars history={service.history} max={service.history.length > 60 ? 90 : 60} />
+        <UptimeBars
+          history={service.history}
+          max={compact ? 36 : service.history.length > 60 ? 90 : 60}
+        />
 
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <span className="inline-flex items-center gap-1.5">
@@ -95,7 +104,7 @@ export function ServiceCard({ service }: { service: Service }) {
           </span>
         </div>
 
-        {service.certExpiry && <CertLine expiry={service.certExpiry} />}
+        {service.certExpiry && !compact && <CertLine expiry={service.certExpiry} />}
       </div>
     </Card>
   );

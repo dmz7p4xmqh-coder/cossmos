@@ -3,7 +3,11 @@ import * as React from "react";
 import { Navbar } from "@/components/Navbar";
 import { StatusHero } from "@/components/StatusHero";
 import { StatsGrid } from "@/components/StatsGrid";
-import { Toolbar, type ServiceFilter } from "@/components/Toolbar";
+import {
+  Toolbar,
+  type ServiceFilter,
+  type ServiceSort,
+} from "@/components/Toolbar";
 import { ServiceGroup } from "@/components/ServiceGroup";
 import { Footer } from "@/components/Footer";
 import {
@@ -36,11 +40,32 @@ function groupServices(services: Service[]) {
   return groups;
 }
 
+function sortServices(services: Service[], sort: ServiceSort) {
+  if (sort === "original") return services;
+  const statusRank: Record<Service["status"], number> = {
+    down: 0,
+    degraded: 1,
+    pending: 2,
+    up: 3,
+  };
+  return [...services].sort((a, b) => {
+    if (sort === "status") return statusRank[a.status] - statusRank[b.status];
+    if (sort === "name") return a.name.localeCompare(b.name);
+    if (sort === "uptime") return a.uptime - b.uptime;
+    if (sort === "response") return b.responseMs - a.responseMs;
+    return (
+      new Date(b.lastChecked).getTime() - new Date(a.lastChecked).getTime()
+    );
+  });
+}
+
 export default function App() {
   const { data, loading, error, refreshing, reload } = useStatus();
   const { t } = useI18n();
   const [query, setQuery] = React.useState("");
   const [filter, setFilter] = React.useState<ServiceFilter>("all");
+  const [sort, setSort] = React.useState<ServiceSort>("original");
+  const [compact, setCompact] = React.useState(false);
   const [, setTick] = React.useState(0);
 
   // Re-render periodically so relative timestamps stay fresh between polls.
@@ -82,7 +107,11 @@ export default function App() {
     });
   }, [data, query, filter]);
 
-  const groups = React.useMemo(() => groupServices(filtered), [filtered]);
+  const sorted = React.useMemo(
+    () => sortServices(filtered, sort),
+    [filtered, sort],
+  );
+  const groups = React.useMemo(() => groupServices(sorted), [sorted]);
 
   return (
     <div className="relative flex min-h-dvh flex-col">
@@ -118,6 +147,10 @@ export default function App() {
                 onQueryChange={setQuery}
                 filter={filter}
                 onFilterChange={setFilter}
+                sort={sort}
+                onSortChange={setSort}
+                compact={compact}
+                onCompactChange={setCompact}
               />
               {groups.length === 0 ? (
                 <EmptyState />
@@ -128,6 +161,7 @@ export default function App() {
                       key={g.name || "_ungrouped"}
                       name={g.name}
                       services={g.services}
+                      compact={compact}
                     />
                   ))}
                 </div>

@@ -98,18 +98,26 @@ func (m *Monitor) buildSnapshot(now time.Time, results []Result) *model.Snapshot
 		id := svc.ID()
 		uptime := m.store.Uptime(id)
 		uptimeSum += uptime
+		target := svc.Target()
+		message := res.Message
+		if m.cfg.Site.HideTargets {
+			target = ""
+			if res.Status == model.StatusDown {
+				message = "check failed"
+			}
+		}
 
 		services = append(services, model.Service{
 			ID:          id,
 			Name:        svc.Name,
 			Group:       svc.Group,
-			URL:         svc.Target(),
+			URL:         target,
 			Description: svc.Description,
 			Status:      res.Status,
 			ResponseMS:  res.ResponseMS,
 			Uptime:      round1(uptime),
 			LastChecked: now,
-			Message:     res.Message,
+			Message:     message,
 			CertExpiry:  res.CertExpiry,
 			History:     m.store.History(id),
 		})

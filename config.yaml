@@ -9,6 +9,7 @@ site:
   description: "实时服务可用性监控 · powered by COSS UI + Go"
   github: "https://github.com/NORMAL-EX/Cossmos"
   refreshInterval: 60                 # 前端自动刷新间隔（秒，serve 模式）
+  hideTargets: false                   # true 时隐藏面板/status.json 中的 URL、域名、IP:端口
 
   # 站点 Logo（可选）。图片 URL 或 data URI；logoDark 为深色模式下的变体。
   # Optional logo (image URL or data URI); logoDark is the dark-mode variant.

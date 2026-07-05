@@ -39,6 +39,7 @@ export interface SiteInfo {
   policeIcpLink?: string;
   footer?: string;
   github?: string;
+  hideTargets?: boolean;
   refreshInterval: number;
 }
 
