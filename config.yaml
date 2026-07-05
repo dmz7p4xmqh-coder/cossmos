@@ -62,8 +62,8 @@ services:
     port: 443
     degradedMs: 600
 
-  - name: "TCP Ping"
-    group: "TCP"
+  - name: "HK Server"
+    group: "Server"
     type: tcp
     host: "64.90.12.71"
     port: 80
