@@ -42,14 +42,15 @@ function groupServices(services: Service[]) {
 
 function sortServices(services: Service[], sort: ServiceSort) {
   if (sort === "original") return services;
-  const statusRank: Record<Service["status"], number> = {
-    down: 0,
-    degraded: 1,
-    pending: 2,
-    up: 3,
+  const statusRank = (service: Service): number => {
+    if (service.maintenance) return 0;
+    if (service.status === "down") return 1;
+    if (service.status === "degraded") return 2;
+    if (service.status === "pending") return 3;
+    return 4;
   };
   return [...services].sort((a, b) => {
-    if (sort === "status") return statusRank[a.status] - statusRank[b.status];
+    if (sort === "status") return statusRank(a) - statusRank(b);
     if (sort === "name") return a.name.localeCompare(b.name);
     if (sort === "uptime") return a.uptime - b.uptime;
     if (sort === "response") return b.responseMs - a.responseMs;
@@ -66,6 +67,9 @@ export default function App() {
   const [filter, setFilter] = React.useState<ServiceFilter>("all");
   const [sort, setSort] = React.useState<ServiceSort>("original");
   const [compact, setCompact] = React.useState(false);
+  const [collapsedGroups, setCollapsedGroups] = React.useState<Set<string>>(
+    () => new Set(),
+  );
   const [, setTick] = React.useState(0);
 
   // Re-render periodically so relative timestamps stay fresh between polls.
@@ -112,6 +116,15 @@ export default function App() {
     [filtered, sort],
   );
   const groups = React.useMemo(() => groupServices(sorted), [sorted]);
+
+  const toggleGroup = React.useCallback((name: string) => {
+    setCollapsedGroups((current) => {
+      const next = new Set(current);
+      if (next.has(name)) next.delete(name);
+      else next.add(name);
+      return next;
+    });
+  }, []);
 
   return (
     <div className="relative flex min-h-dvh flex-col">
@@ -162,6 +175,8 @@ export default function App() {
                       name={g.name}
                       services={g.services}
                       compact={compact}
+                      collapsed={collapsedGroups.has(g.name)}
+                      onToggle={() => toggleGroup(g.name)}
                     />
                   ))}
                 </div>

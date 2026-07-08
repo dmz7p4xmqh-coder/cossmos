@@ -102,6 +102,8 @@ services:
     expectStatus: [200, 301, 302]
     keyword: ""                           # 响应体须包含的关键字(可选)
     degradedMs: 1500                      # 慢于此毫秒数 => 降级
+    maintenance: false                    # 可选;前端显示维护中标记
+    maintenanceMessage: ""                # 可选;维护说明
   - name: "数据库"
     type: tcp
     host: "db.example.com"

@@ -8,7 +8,7 @@ coverage.*
 # --- runtime data & generated output ---
 /data/
 /public/
-status.json
+/status.json
 
 # --- frontend ---
 web/node_modules/

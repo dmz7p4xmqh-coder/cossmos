@@ -43,6 +43,8 @@ services:
     degradedMs: 1500            # 慢于该毫秒数判定为 degraded
     timeout: 10
     insecure: false             # 跳过 TLS 证书校验
+    maintenance: false          # 维护模式标记 / mark as under maintenance
+    maintenanceMessage: ""      # 维护说明（可选）/ optional maintenance note
     # headers:
     #   Authorization: "Bearer xxx"
 

@@ -29,12 +29,12 @@ type Service struct {
 	Type        CheckType `yaml:"type"`
 
 	// HTTP options.
-	URL          string            `yaml:"url"`
-	Method       string            `yaml:"method"`
-	ExpectStatus []int             `yaml:"expectStatus"`
-	Keyword      string            `yaml:"keyword"`     // body must contain this substring
-	Headers      map[string]string `yaml:"headers"`
-	Insecure     bool              `yaml:"insecure"`    // skip TLS verification
+	URL            string            `yaml:"url"`
+	Method         string            `yaml:"method"`
+	ExpectStatus   []int             `yaml:"expectStatus"`
+	Keyword        string            `yaml:"keyword"` // body must contain this substring
+	Headers        map[string]string `yaml:"headers"`
+	Insecure       bool              `yaml:"insecure"` // skip TLS verification
 	FollowRedirect *bool           `yaml:"followRedirect"`
 
 	// TCP options.
@@ -42,8 +42,10 @@ type Service struct {
 	Port int    `yaml:"port"`
 
 	// Shared.
-	DegradedMs int `yaml:"degradedMs"` // slower than this (ms) => degraded
-	TimeoutSec int `yaml:"timeout"`    // per-service timeout override (seconds)
+	DegradedMs         int    `yaml:"degradedMs"` // slower than this (ms) => degraded
+	TimeoutSec         int    `yaml:"timeout"`    // per-service timeout override (seconds)
+	Maintenance        bool   `yaml:"maintenance"`
+	MaintenanceMessage string `yaml:"maintenanceMessage"`
 }
 
 // Monitor holds scheduler-level tuning.

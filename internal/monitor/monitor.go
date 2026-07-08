@@ -108,18 +108,20 @@ func (m *Monitor) buildSnapshot(now time.Time, results []Result) *model.Snapshot
 		}
 
 		services = append(services, model.Service{
-			ID:          id,
-			Name:        svc.Name,
-			Group:       svc.Group,
-			URL:         target,
-			Description: svc.Description,
-			Status:      res.Status,
-			ResponseMS:  res.ResponseMS,
-			Uptime:      round1(uptime),
-			LastChecked: now,
-			Message:     message,
-			CertExpiry:  res.CertExpiry,
-			History:     m.store.History(id),
+			ID:                 id,
+			Name:               svc.Name,
+			Group:              svc.Group,
+			URL:                target,
+			Description:        svc.Description,
+			Status:             res.Status,
+			ResponseMS:         res.ResponseMS,
+			Uptime:             round1(uptime),
+			LastChecked:        now,
+			Message:            message,
+			CertExpiry:         res.CertExpiry,
+			Maintenance:        svc.Maintenance,
+			MaintenanceMessage: svc.MaintenanceMessage,
+			History:            m.store.History(id),
 		})
 
 		stats.Total++

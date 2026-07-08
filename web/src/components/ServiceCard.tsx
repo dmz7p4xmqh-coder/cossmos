@@ -1,7 +1,10 @@
-import { Activity, Gauge, Info, ShieldCheck } from "lucide-react";
+import * as React from "react";
+import { Activity, Copy, Gauge, Info, ShieldCheck, Wrench } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ServiceDetailDialog } from "@/components/ServiceDetailDialog";
 import { StatusDot } from "./StatusDot";
 import { UptimeBars } from "./UptimeBars";
 import { useI18n } from "@/contexts/i18n";
@@ -48,12 +51,32 @@ export function ServiceCard({
   compact?: boolean;
 }) {
   const { t } = useI18n();
+  const [open, setOpen] = React.useState(false);
+  const [copied, setCopied] = React.useState(false);
   const meta = statusMeta[service.status];
   const hasIssue = service.status === "down" || service.status === "degraded";
   const subtitle = service.description || service.url;
+  const serviceHash = `service-${service.id}`;
+
+  const copyLink = React.useCallback(async () => {
+    const url = `${window.location.origin}${window.location.pathname}${window.location.search}#${serviceHash}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
+    } catch {
+      window.location.hash = serviceHash;
+    }
+  }, [serviceHash]);
 
   return (
-    <Card className="gap-0 overflow-hidden py-0 transition-shadow hover:shadow-md">
+    <Card
+      id={serviceHash}
+      className={cn(
+        "scroll-mt-24 gap-0 overflow-hidden py-0 transition-shadow hover:shadow-md",
+        service.maintenance && "border-warning/40",
+      )}
+    >
       <div className={cn("flex flex-col p-4 sm:p-5", compact ? "gap-3" : "gap-4")}>
         <div className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-start gap-3">
@@ -70,10 +93,23 @@ export function ServiceCard({
               )}
             </div>
           </div>
-          <Badge variant={meta.badge} className="shrink-0">
-            {t(meta.labelKey)}
-          </Badge>
+          <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
+            {service.maintenance && (
+              <Badge variant="warning" title={service.maintenanceMessage}>
+                <Wrench className="size-3" />
+                {t("service.maintenance")}
+              </Badge>
+            )}
+            <Badge variant={meta.badge}>{t(meta.labelKey)}</Badge>
+          </div>
         </div>
+
+        {service.maintenance && service.maintenanceMessage && (
+          <p className="flex items-center gap-1.5 text-xs text-warning-foreground">
+            <Wrench className="size-3.5 shrink-0" />
+            <span className="truncate">{service.maintenanceMessage}</span>
+          </p>
+        )}
 
         {hasIssue && service.message && (
           <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -105,7 +141,24 @@ export function ServiceCard({
         </div>
 
         {service.certExpiry && !compact && <CertLine expiry={service.certExpiry} />}
+
+        <div className="flex items-center justify-end gap-2 border-t border-border/60 pt-3">
+          <Button size="sm" variant="outline" onClick={copyLink}>
+            <Copy />
+            {copied ? t("action.copied") : t("action.copyLink")}
+          </Button>
+          <Button size="sm" variant="outline" onClick={() => setOpen(true)}>
+            <Info />
+            {t("action.details")}
+          </Button>
+        </div>
       </div>
+      <ServiceDetailDialog
+        open={open}
+        service={service}
+        onClose={() => setOpen(false)}
+        onCopyLink={copyLink}
+      />
     </Card>
   );
 }

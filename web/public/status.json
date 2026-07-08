@@ -1,0 +1,112 @@
+{
+  "generator": "cossmos",
+  "version": "dev",
+  "updatedAt": "2026-07-08T09:45:00Z",
+  "overall": "degraded",
+  "stats": {
+    "total": 4,
+    "up": 2,
+    "degraded": 1,
+    "down": 1,
+    "avgUptime": 96.8
+  },
+  "site": {
+    "title": "Neko Server 服务状态",
+    "description": "实时服务可用性监控 · powered by COSS UI + Go",
+    "github": "https://github.com/NORMAL-EX/Cossmos",
+    "icp": "鲁ICP备2024128177号-1",
+    "icpLink": "https://beian.miit.gov.cn/",
+    "policeIcpLink": "https://beian.mps.gov.cn/",
+    "refreshInterval": 60
+  },
+  "services": [
+    {
+      "id": "service-blog",
+      "name": "Blog",
+      "group": "Web",
+      "url": "https://www.kernelneko.top",
+      "description": "主站点可用性",
+      "status": "up",
+      "responseMs": 186,
+      "uptime": 99.9,
+      "lastChecked": "2026-07-08T09:45:00Z",
+      "message": "HTTP 200",
+      "certExpiry": "2026-10-01T00:00:00Z",
+      "history": [
+        { "t": "2026-07-08T08:15:00Z", "s": "up", "r": 172 },
+        { "t": "2026-07-08T08:30:00Z", "s": "up", "r": 181 },
+        { "t": "2026-07-08T08:45:00Z", "s": "up", "r": 178 },
+        { "t": "2026-07-08T09:00:00Z", "s": "up", "r": 201 },
+        { "t": "2026-07-08T09:15:00Z", "s": "up", "r": 190 },
+        { "t": "2026-07-08T09:30:00Z", "s": "up", "r": 177 },
+        { "t": "2026-07-08T09:45:00Z", "s": "up", "r": 186 }
+      ]
+    },
+    {
+      "id": "service-gitea",
+      "name": "Gitea",
+      "group": "Web",
+      "url": "https://gitea.kernelneko.top",
+      "description": "代码托管服务",
+      "status": "degraded",
+      "responseMs": 1840,
+      "uptime": 98.2,
+      "lastChecked": "2026-07-08T09:45:00Z",
+      "message": "slow response 1840ms",
+      "certExpiry": "2026-09-18T00:00:00Z",
+      "history": [
+        { "t": "2026-07-08T08:15:00Z", "s": "up", "r": 510 },
+        { "t": "2026-07-08T08:30:00Z", "s": "up", "r": 534 },
+        { "t": "2026-07-08T08:45:00Z", "s": "degraded", "r": 1620 },
+        { "t": "2026-07-08T09:00:00Z", "s": "up", "r": 601 },
+        { "t": "2026-07-08T09:15:00Z", "s": "up", "r": 588 },
+        { "t": "2026-07-08T09:30:00Z", "s": "degraded", "r": 1711 },
+        { "t": "2026-07-08T09:45:00Z", "s": "degraded", "r": 1840 }
+      ]
+    },
+    {
+      "id": "service-openlist",
+      "name": "OpenList",
+      "group": "Web",
+      "url": "https://alist.kernelneko.top",
+      "description": "文件列表服务",
+      "status": "down",
+      "responseMs": 0,
+      "uptime": 89.1,
+      "lastChecked": "2026-07-08T09:45:00Z",
+      "message": "connection refused",
+      "maintenance": true,
+      "maintenanceMessage": "正在迁移存储，预计稍后恢复。",
+      "history": [
+        { "t": "2026-07-08T08:15:00Z", "s": "up", "r": 244 },
+        { "t": "2026-07-08T08:30:00Z", "s": "up", "r": 260 },
+        { "t": "2026-07-08T08:45:00Z", "s": "up", "r": 251 },
+        { "t": "2026-07-08T09:00:00Z", "s": "down", "r": 0 },
+        { "t": "2026-07-08T09:15:00Z", "s": "down", "r": 0 },
+        { "t": "2026-07-08T09:30:00Z", "s": "down", "r": 0 },
+        { "t": "2026-07-08T09:45:00Z", "s": "down", "r": 0 }
+      ]
+    },
+    {
+      "id": "service-cloudflare-dns",
+      "name": "Cloudflare DNS",
+      "group": "DNS",
+      "url": "1.1.1.1:443",
+      "description": "TCP 端口检查",
+      "status": "up",
+      "responseMs": 46,
+      "uptime": 100,
+      "lastChecked": "2026-07-08T09:45:00Z",
+      "message": "connected",
+      "history": [
+        { "t": "2026-07-08T08:15:00Z", "s": "up", "r": 41 },
+        { "t": "2026-07-08T08:30:00Z", "s": "up", "r": 44 },
+        { "t": "2026-07-08T08:45:00Z", "s": "up", "r": 49 },
+        { "t": "2026-07-08T09:00:00Z", "s": "up", "r": 43 },
+        { "t": "2026-07-08T09:15:00Z", "s": "up", "r": 47 },
+        { "t": "2026-07-08T09:30:00Z", "s": "up", "r": 45 },
+        { "t": "2026-07-08T09:45:00Z", "s": "up", "r": 46 }
+      ]
+    }
+  ]
+}

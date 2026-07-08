@@ -25,18 +25,20 @@ type CheckPoint struct {
 
 // Service is the current state plus recent history of one monitored target.
 type Service struct {
-	ID          string       `json:"id"`
-	Name        string       `json:"name"`
-	Group       string       `json:"group,omitempty"`
-	URL         string       `json:"url,omitempty"`
-	Description string       `json:"description,omitempty"`
-	Status      Status       `json:"status"`
-	ResponseMS  int64        `json:"responseMs"`
-	Uptime      float64      `json:"uptime"` // percentage (0-100) over the kept history window
-	LastChecked time.Time    `json:"lastChecked"`
-	Message     string       `json:"message,omitempty"`
-	CertExpiry  *time.Time   `json:"certExpiry,omitempty"` // TLS certificate expiry (HTTPS only)
-	History     []CheckPoint `json:"history"`
+	ID                 string       `json:"id"`
+	Name               string       `json:"name"`
+	Group              string       `json:"group,omitempty"`
+	URL                string       `json:"url,omitempty"`
+	Description        string       `json:"description,omitempty"`
+	Status             Status       `json:"status"`
+	ResponseMS         int64        `json:"responseMs"`
+	Uptime             float64      `json:"uptime"` // percentage (0-100) over the kept history window
+	LastChecked        time.Time    `json:"lastChecked"`
+	Message            string       `json:"message,omitempty"`
+	CertExpiry         *time.Time   `json:"certExpiry,omitempty"` // TLS certificate expiry (HTTPS only)
+	Maintenance        bool         `json:"maintenance,omitempty"`
+	MaintenanceMessage string       `json:"maintenanceMessage,omitempty"`
+	History            []CheckPoint `json:"history"`
 }
 
 // SiteInfo carries presentation-level settings the frontend renders, including
@@ -55,7 +57,7 @@ type SiteInfo struct {
 	Footer          string `json:"footer,omitempty" yaml:"footer"`
 	GitHub          string `json:"github,omitempty" yaml:"github"`
 	HideTargets     bool   `json:"hideTargets,omitempty" yaml:"hideTargets"` // hide service URLs/IPs from public status output
-	RefreshInterval int    `json:"refreshInterval" yaml:"refreshInterval"` // frontend auto-refresh seconds (serve mode)
+	RefreshInterval int    `json:"refreshInterval" yaml:"refreshInterval"`   // frontend auto-refresh seconds (serve mode)
 }
 
 // Stats is a roll-up the frontend shows in the header.
